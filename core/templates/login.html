@@ -1,22 +1,53 @@
 {% extends 'base.html' %}
 {% block content %}
-<div class="card" style="max-width: 500px; margin: 4rem auto;">
-    <h2 style="margin-bottom: 1.5rem;">Login</h2>
-    <form method="post">
-        {% csrf_token %}
-        {% if form.errors %}
-        <div class="alert" style="background: #f8d7da; color: #721c24; margin-bottom: 1rem;">Invalid username or password</div>
-        {% endif %}
-        <div class="form-group">
-            <label>Username</label>
-            <input type="text" name="username" required>
+<div style="min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 2rem; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+    <div class="card" style="max-width: 450px; width: 100%; box-shadow: 0 20px 60px rgba(0,0,0,0.3);">
+        <div style="text-align: center; margin-bottom: 2rem;">
+            <div style="font-size: 3rem; margin-bottom: 0.5rem;">🛡️</div>
+            <h2 style="font-size: 1.75rem; font-weight: 800; color: #1e293b; margin-bottom: 0.5rem;">Welcome Back</h2>
+            <p style="color: #64748b; font-size: 0.95rem;">Sign in to your ShieldGuard account</p>
         </div>
-        <div class="form-group">
-            <label>Password</label>
-            <input type="password" name="password" required>
+        <form method="post">
+            {% csrf_token %}
+            {% if form.errors %}
+            <div class="alert alert-error" style="margin-bottom: 1.5rem;">
+                <i class="fas fa-exclamation-circle"></i>
+                Invalid username or password
+            </div>
+            {% endif %}
+            <div class="form-group">
+                <label><i class="fas fa-user" style="margin-right: 0.5rem;"></i>Username</label>
+                <div style="position: relative;">
+                    <i class="fas fa-user input-icon"></i>
+                    <input type="text" name="username" class="input-with-icon" placeholder="Enter your username" required autofocus>
+                </div>
+            </div>
+            <div class="form-group">
+                <label><i class="fas fa-lock" style="margin-right: 0.5rem;"></i>Password</label>
+                <div style="position: relative;">
+                    <i class="fas fa-lock input-icon"></i>
+                    <input type="password" name="password" id="password" class="input-with-icon" placeholder="Enter your password" required>
+                    <i class="fas fa-eye" id="togglePassword" style="position: absolute; right: 1rem; top: 2.5rem; cursor: pointer; color: #9ca3af;"></i>
+                </div>
+            </div>
+            <button type="submit" class="btn" style="width: 100%; justify-content: center; padding: 1rem; font-size: 1rem; margin-top: 0.5rem;">
+                <i class="fas fa-sign-in-alt"></i> Sign In
+            </button>
+        </form>
+        <div style="text-align: center; margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid #e5e7eb;">
+            <p style="color: #64748b; font-size: 0.9rem;">Don't have an account? <a href="{% url 'signup' %}" style="color: #667eea; font-weight: 600; text-decoration: none;">Sign Up</a></p>
         </div>
-        <button type="submit" class="btn">Login</button>
-        <a href="{% url 'signup' %}" style="margin-left: 1rem;">Sign Up</a>
-    </form>
+    </div>
 </div>
+
+<script>
+const togglePassword = document.getElementById('togglePassword');
+const password = document.getElementById('password');
+togglePassword.addEventListener('click', function() {
+    const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+    password.setAttribute('type', type);
+    this.classList.toggle('fa-eye');
+    this.classList.toggle('fa-eye-slash');
+});
+</script>
 {% endblock %}

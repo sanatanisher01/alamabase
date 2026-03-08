@@ -1,19 +1,94 @@
 {% extends 'base.html' %}
+{% block page_title %}Upload Questionnaire{% endblock %}
 {% block content %}
-<div class="card" style="max-width: 600px; margin: 2rem auto;">
-    <h2>Upload Questionnaire</h2>
-    <form method="post" enctype="multipart/form-data">
+<div class="card" style="max-width: 700px; margin: 2rem auto;">
+    <div style="text-align: center; margin-bottom: 2rem;">
+        <div style="width: 80px; height: 80px; margin: 0 auto 1rem; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 20px; display: flex; align-items: center; justify-content: center; font-size: 2.5rem;">📄</div>
+        <h2 style="font-size: 1.75rem; font-weight: 700; color: #1e293b; margin-bottom: 0.5rem;">Upload Questionnaire</h2>
+        <p style="color: #64748b;">Upload your security assessment or compliance form</p>
+    </div>
+    
+    <form method="post" enctype="multipart/form-data" id="uploadForm">
         {% csrf_token %}
         <div class="form-group">
-            <label>Title</label>
-            <input type="text" name="title" required>
+            <label><i class="fas fa-heading" style="margin-right: 0.5rem;"></i>Title</label>
+            <input type="text" name="title" placeholder="e.g., Q4 Security Assessment" required>
         </div>
+        
         <div class="form-group">
-            <label>File</label>
-            <input type="file" name="file" accept=".pdf,.docx,.txt,.xlsx" required>
+            <label><i class="fas fa-file" style="margin-right: 0.5rem;"></i>File</label>
+            <div class="upload-area" id="uploadArea">
+                <input type="file" name="file" id="fileInput" accept=".pdf,.docx,.txt,.xlsx" required style="display: none;">
+                <div id="uploadPrompt">
+                    <div style="font-size: 3rem; margin-bottom: 1rem; color: #cbd5e1;">📁</div>
+                    <p style="font-size: 1.1rem; font-weight: 600; color: #475569; margin-bottom: 0.5rem;">Drop your file here or click to browse</p>
+                    <p style="font-size: 0.9rem; color: #94a3b8;">Supports PDF, DOCX, TXT, XLSX</p>
+                </div>
+                <div id="fileInfo" style="display: none;">
+                    <div style="font-size: 3rem; margin-bottom: 1rem;">✅</div>
+                    <p style="font-size: 1.1rem; font-weight: 600; color: #10b981;" id="fileName"></p>
+                    <p style="font-size: 0.9rem; color: #64748b;" id="fileSize"></p>
+                </div>
+            </div>
         </div>
-        <button type="submit" class="btn">Upload</button>
-        <a href="{% url 'dashboard' %}" class="btn btn-secondary">Cancel</a>
+        
+        <div style="display: flex; gap: 1rem; margin-top: 2rem;">
+            <button type="submit" class="btn" style="flex: 1; justify-content: center; padding: 1rem;">
+                <i class="fas fa-upload"></i> Upload Questionnaire
+            </button>
+            <a href="{% url 'dashboard' %}" class="btn btn-secondary" style="padding: 1rem 1.5rem;">
+                <i class="fas fa-times"></i> Cancel
+            </a>
+        </div>
     </form>
 </div>
+
+<script>
+const uploadArea = document.getElementById('uploadArea');
+const fileInput = document.getElementById('fileInput');
+const uploadPrompt = document.getElementById('uploadPrompt');
+const fileInfo = document.getElementById('fileInfo');
+const fileName = document.getElementById('fileName');
+const fileSize = document.getElementById('fileSize');
+
+uploadArea.addEventListener('click', () => fileInput.click());
+
+uploadArea.addEventListener('dragover', (e) => {
+    e.preventDefault();
+    uploadArea.classList.add('dragover');
+});
+
+uploadArea.addEventListener('dragleave', () => {
+    uploadArea.classList.remove('dragover');
+});
+
+uploadArea.addEventListener('drop', (e) => {
+    e.preventDefault();
+    uploadArea.classList.remove('dragover');
+    const files = e.dataTransfer.files;
+    if (files.length > 0) {
+        fileInput.files = files;
+        displayFileInfo(files[0]);
+    }
+});
+
+fileInput.addEventListener('change', (e) => {
+    if (e.target.files.length > 0) {
+        displayFileInfo(e.target.files[0]);
+    }
+});
+
+function displayFileInfo(file) {
+    uploadPrompt.style.display = 'none';
+    fileInfo.style.display = 'block';
+    fileName.textContent = file.name;
+    fileSize.textContent = formatFileSize(file.size);
+}
+
+function formatFileSize(bytes) {
+    if (bytes < 1024) return bytes + ' B';
+    if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
+    return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
+}
+</script>
 {% endblock %}

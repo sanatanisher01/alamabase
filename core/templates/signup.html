@@ -1,26 +1,65 @@
 {% extends 'base.html' %}
 {% block content %}
-<div class="card" style="max-width: 500px; margin: 4rem auto;">
-    <h2 style="margin-bottom: 1.5rem;">Sign Up</h2>
-    <form method="post">
-        {% csrf_token %}
-        {% if form.errors %}
-        <div class="alert" style="background: #f8d7da; color: #721c24; margin-bottom: 1rem;">{{ form.errors }}</div>
-        {% endif %}
-        <div class="form-group">
-            <label>Username</label>
-            <input type="text" name="username" required>
+<div style="min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 2rem; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+    <div class="card" style="max-width: 450px; width: 100%; box-shadow: 0 20px 60px rgba(0,0,0,0.3);">
+        <div style="text-align: center; margin-bottom: 2rem;">
+            <div style="font-size: 3rem; margin-bottom: 0.5rem;">🛡️</div>
+            <h2 style="font-size: 1.75rem; font-weight: 800; color: #1e293b; margin-bottom: 0.5rem;">Create Account</h2>
+            <p style="color: #64748b; font-size: 0.95rem;">Join ShieldGuard to automate your questionnaires</p>
         </div>
-        <div class="form-group">
-            <label>Password</label>
-            <input type="password" name="password1" required>
+        <form method="post">
+            {% csrf_token %}
+            {% if form.errors %}
+            <div class="alert alert-error" style="margin-bottom: 1.5rem;">
+                <i class="fas fa-exclamation-circle"></i>
+                {{ form.errors }}
+            </div>
+            {% endif %}
+            <div class="form-group">
+                <label><i class="fas fa-user" style="margin-right: 0.5rem;"></i>Username</label>
+                <div style="position: relative;">
+                    <i class="fas fa-user input-icon"></i>
+                    <input type="text" name="username" class="input-with-icon" placeholder="Choose a username" required autofocus>
+                </div>
+            </div>
+            <div class="form-group">
+                <label><i class="fas fa-lock" style="margin-right: 0.5rem;"></i>Password</label>
+                <div style="position: relative;">
+                    <i class="fas fa-lock input-icon"></i>
+                    <input type="password" name="password1" id="password1" class="input-with-icon" placeholder="Create a password" required>
+                    <i class="fas fa-eye" id="togglePassword1" style="position: absolute; right: 1rem; top: 2.5rem; cursor: pointer; color: #9ca3af;"></i>
+                </div>
+            </div>
+            <div class="form-group">
+                <label><i class="fas fa-lock" style="margin-right: 0.5rem;"></i>Confirm Password</label>
+                <div style="position: relative;">
+                    <i class="fas fa-lock input-icon"></i>
+                    <input type="password" name="password2" id="password2" class="input-with-icon" placeholder="Confirm your password" required>
+                    <i class="fas fa-eye" id="togglePassword2" style="position: absolute; right: 1rem; top: 2.5rem; cursor: pointer; color: #9ca3af;"></i>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-success" style="width: 100%; justify-content: center; padding: 1rem; font-size: 1rem; margin-top: 0.5rem;">
+                <i class="fas fa-user-plus"></i> Create Account
+            </button>
+        </form>
+        <div style="text-align: center; margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid #e5e7eb;">
+            <p style="color: #64748b; font-size: 0.9rem;">Already have an account? <a href="{% url 'login' %}" style="color: #667eea; font-weight: 600; text-decoration: none;">Sign In</a></p>
         </div>
-        <div class="form-group">
-            <label>Confirm Password</label>
-            <input type="password" name="password2" required>
-        </div>
-        <button type="submit" class="btn btn-success">Sign Up</button>
-        <a href="{% url 'login' %}" style="margin-left: 1rem;">Login</a>
-    </form>
+    </div>
 </div>
+
+<script>
+function setupPasswordToggle(toggleId, passwordId) {
+    const toggle = document.getElementById(toggleId);
+    const password = document.getElementById(passwordId);
+    toggle.addEventListener('click', function() {
+        const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+        password.setAttribute('type', type);
+        this.classList.toggle('fa-eye');
+        this.classList.toggle('fa-eye-slash');
+    });
+}
+setupPasswordToggle('togglePassword1', 'password1');
+setupPasswordToggle('togglePassword2', 'password2');
+</script>
 {% endblock %}
