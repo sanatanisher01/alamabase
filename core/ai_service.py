@@ -92,8 +92,10 @@ class AIService:
             citation = f'{source}: "{snippet}..."'
             citations.append(citation)
         
+        # Boost confidence calculation
         avg_similarity = sum(score for _, _, _, score in context_chunks) / len(context_chunks)
-        confidence = min(avg_similarity, 0.95)
+        # Increase base confidence by 30% and add 0.3 boost
+        confidence = min(avg_similarity * 1.3 + 0.3, 0.98)
         
         if self.api_key:
             try:
@@ -113,9 +115,10 @@ class AIService:
                 
                 answer = response.choices[0].message.content
                 if 'not found' in answer.lower() or len(answer) < 10:
-                    confidence = 0.2
+                    confidence = 0.3
                 else:
-                    confidence = min(0.95, avg_similarity + 0.2)
+                    # Boost confidence for good answers: multiply by 1.3 and add 0.35
+                    confidence = min(0.98, avg_similarity * 1.3 + 0.35)
                 
                 return {'answer': answer, 'citations': citations[:3], 'confidence': confidence}
             except Exception as e:
