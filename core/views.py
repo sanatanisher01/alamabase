@@ -41,9 +41,13 @@ def logout_view(request):
 
 @login_required
 def dashboard_view(request):
-    questionnaires = Questionnaire.objects.filter(user=request.user).order_by('-uploaded_at')
-    documents = ReferenceDocument.objects.filter(user=request.user).order_by('-uploaded_at')
-    return render(request, 'dashboard.html', {'questionnaires': questionnaires, 'documents': documents})
+    try:
+        questionnaires = Questionnaire.objects.filter(user=request.user).order_by('-uploaded_at')
+        documents = ReferenceDocument.objects.filter(user=request.user).order_by('-uploaded_at')
+        return render(request, 'dashboard.html', {'questionnaires': questionnaires, 'documents': documents})
+    except Exception as e:
+        print(f"Dashboard error: {e}")
+        return render(request, 'dashboard.html', {'questionnaires': [], 'documents': []})
 
 @login_required
 def upload_document_view(request):
