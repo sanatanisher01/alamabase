@@ -1,27 +1,29 @@
 {% extends 'base.html' %}
 {% block content %}
-<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
-    <h2 style="font-size: 2.5rem; color: #2c3e50; font-weight: 700;">Dashboard</h2>
-    <span class="badge badge-success">Active</span>
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 3rem;">
+    <h2 style="font-size: 3rem; font-weight: 800; letter-spacing: -1px;">Dashboard</h2>
+    <span class="badge badge-success floating">● Active</span>
 </div>
 
 <div class="grid">
-    <div class="card" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none;">
-        <h3 style="font-size: 1.5rem; margin-bottom: 1rem;">📄 Upload Questionnaire</h3>
-        <p style="opacity: 0.9; margin-bottom: 1.5rem;">Upload security assessments, compliance forms, or vendor questionnaires.</p>
-        <a href="{% url 'upload_questionnaire' %}" class="btn" style="background: white; color: #667eea;">Upload Now</a>
+    <div class="glass-card" style="background: linear-gradient(135deg, rgba(102, 126, 234, 0.3) 0%, rgba(118, 75, 162, 0.3) 100%); border: 2px solid rgba(255, 255, 255, 0.3);">
+        <div style="font-size: 3rem; margin-bottom: 1rem;">📄</div>
+        <h3 style="font-size: 1.8rem; margin-bottom: 1rem; font-weight: 800;">Upload Questionnaire</h3>
+        <p style="color: rgba(255, 255, 255, 0.9); margin-bottom: 2rem; line-height: 1.6;">Upload security assessments, compliance forms, or vendor questionnaires.</p>
+        <a href="{% url 'upload_questionnaire' %}" class="btn">Upload Now →</a>
     </div>
     
-    <div class="card" style="background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); color: white; border: none;">
-        <h3 style="font-size: 1.5rem; margin-bottom: 1rem;">📚 Upload Reference</h3>
-        <p style="opacity: 0.9; margin-bottom: 1.5rem;">Add your company's security policies and documentation.</p>
-        <a href="{% url 'upload_document' %}" class="btn" style="background: white; color: #11998e;">Upload Now</a>
+    <div class="glass-card" style="background: linear-gradient(135deg, rgba(17, 153, 142, 0.3) 0%, rgba(56, 239, 125, 0.3) 100%); border: 2px solid rgba(255, 255, 255, 0.3);">
+        <div style="font-size: 3rem; margin-bottom: 1rem;">📚</div>
+        <h3 style="font-size: 1.8rem; margin-bottom: 1rem; font-weight: 800;">Upload Reference</h3>
+        <p style="color: rgba(255, 255, 255, 0.9); margin-bottom: 2rem; line-height: 1.6;">Add your company's security policies and documentation.</p>
+        <a href="{% url 'upload_document' %}" class="btn btn-success">Upload Now →</a>
     </div>
 </div>
 
-<div class="card">
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
-        <h3 style="font-size: 1.8rem; color: #2c3e50;">Your Questionnaires</h3>
+<div class="glass-card" style="margin-top: 3rem;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+        <h3 style="font-size: 2rem; font-weight: 800;">Your Questionnaires</h3>
         <span class="badge badge-primary">{{ questionnaires.count }} Total</span>
     </div>
     {% if questionnaires %}
@@ -37,38 +39,38 @@
         <tbody>
             {% for q in questionnaires %}
             <tr>
-                <td style="font-weight: 600; color: #2c3e50;">{{ q.title }}</td>
-                <td style="color: #6c757d;">{{ q.uploaded_at|date:"M d, Y" }}</td>
+                <td style="font-weight: 700;">{{ q.title }}</td>
+                <td style="opacity: 0.8;">{{ q.uploaded_at|date:"M d, Y" }}</td>
                 <td>
                     {% if q.processed %}
-                    <span class="badge badge-success">Processed</span>
+                    <span class="badge badge-success">✓ Processed</span>
                     {% else %}
-                    <span class="badge" style="background: #ffc107; color: #000;">Pending</span>
+                    <span class="badge" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">⏳ Pending</span>
                     {% endif %}
                 </td>
                 <td>
                     {% if q.processed %}
-                    <a href="{% url 'review_answers' q.pk %}" class="btn btn-secondary" style="padding: 0.5rem 1rem; font-size: 0.9rem;">Review</a>
+                    <a href="{% url 'review_answers' q.pk %}" class="btn btn-secondary" style="padding: 0.75rem 1.5rem; font-size: 0.9rem;">Review</a>
                     {% else %}
-                    <a href="{% url 'process_questionnaire' q.pk %}" class="btn" style="padding: 0.5rem 1rem; font-size: 0.9rem;">Process</a>
+                    <a href="{% url 'process_questionnaire' q.pk %}" class="btn" style="padding: 0.75rem 1.5rem; font-size: 0.9rem;">Process</a>
                     {% endif %}
-                    <a href="{% url 'delete_questionnaire' q.pk %}" class="btn btn-danger" style="padding: 0.5rem 1rem; font-size: 0.9rem;" onclick="return confirm('Delete?')">Delete</a>
+                    <a href="{% url 'delete_questionnaire' q.pk %}" class="btn btn-danger" style="padding: 0.75rem 1.5rem; font-size: 0.9rem;" onclick="return confirm('Delete?')">Delete</a>
                 </td>
             </tr>
             {% endfor %}
         </tbody>
     </table>
     {% else %}
-    <div style="text-align: center; padding: 3rem; color: #6c757d;">
-        <div style="font-size: 3rem; margin-bottom: 1rem;">📋</div>
-        <p style="font-size: 1.1rem;">No questionnaires yet. Upload one to get started!</p>
+    <div style="text-align: center; padding: 4rem; color: white;">
+        <div style="font-size: 5rem; margin-bottom: 1.5rem; opacity: 0.5;">📋</div>
+        <p style="font-size: 1.3rem; font-weight: 600;">No questionnaires yet. Upload one to get started!</p>
     </div>
     {% endif %}
 </div>
 
-<div class="card">
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
-        <h3 style="font-size: 1.8rem; color: #2c3e50;">Reference Documents</h3>
+<div class="glass-card" style="margin-top: 2rem;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+        <h3 style="font-size: 2rem; font-weight: 800;">Reference Documents</h3>
         <span class="badge badge-success">{{ documents.count }} Documents</span>
     </div>
     {% if documents %}
@@ -83,19 +85,19 @@
         <tbody>
             {% for doc in documents %}
             <tr>
-                <td style="font-weight: 600; color: #2c3e50;">📄 {{ doc.title }}</td>
-                <td style="color: #6c757d;">{{ doc.uploaded_at|date:"M d, Y" }}</td>
+                <td style="font-weight: 700;">📄 {{ doc.title }}</td>
+                <td style="opacity: 0.8;">{{ doc.uploaded_at|date:"M d, Y" }}</td>
                 <td>
-                    <a href="{% url 'delete_document' doc.pk %}" class="btn btn-danger" style="padding: 0.5rem 1rem; font-size: 0.9rem;" onclick="return confirm('Delete?')">Delete</a>
+                    <a href="{% url 'delete_document' doc.pk %}" class="btn btn-danger" style="padding: 0.75rem 1.5rem; font-size: 0.9rem;" onclick="return confirm('Delete?')">Delete</a>
                 </td>
             </tr>
             {% endfor %}
         </tbody>
     </table>
     {% else %}
-    <div style="text-align: center; padding: 3rem; color: #6c757d;">
-        <div style="font-size: 3rem; margin-bottom: 1rem;">📚</div>
-        <p style="font-size: 1.1rem;">No reference documents yet. Upload some to enable AI answers!</p>
+    <div style="text-align: center; padding: 4rem; color: white;">
+        <div style="font-size: 5rem; margin-bottom: 1.5rem; opacity: 0.5;">📚</div>
+        <p style="font-size: 1.3rem; font-weight: 600;">No reference documents yet. Upload some to enable AI answers!</p>
     </div>
     {% endif %}
 </div>

@@ -12,17 +12,18 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 
 import os
 from pathlib import Path
-from dotenv import load_dotenv
+import dotenv
 
-load_dotenv()
+# Load environment variables
+dotenv.load_dotenv()
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-j5(2@qlmiyh!utuw55d#e(%c3jn4d$o022bo6^r)hq&z^r=5eg')
+SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-j5(2@qlmiyh!utuw55d#e(%c3jn4d$o022bo6^r)hq&z^r=5eg')
 
-DEBUG = os.getenv('DEBUG', 'True') == 'True'
+DEBUG = os.environ.get('DEBUG', 'False') == 'True'
 
-ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',')
+ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',')
 
 
 # Application definition

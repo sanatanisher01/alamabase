@@ -7,7 +7,11 @@ import openpyxl
 
 class AIService:
     def __init__(self):
-        self.api_key = os.getenv('GROQ_API_KEY', '')
+        self.api_key = os.environ.get('GROQ_API_KEY', '')
+        if self.api_key:
+            print(f"✓ Groq API key loaded: {self.api_key[:10]}...")
+        else:
+            print("⚠ No Groq API key found, using fallback")
         
     def extract_text_from_file(self, file_path: str) -> str:
         ext = file_path.lower().split('.')[-1]
